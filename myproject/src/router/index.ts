@@ -1,23 +1,53 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createWebHashHistory, createRouter } from 'vue-router'
+
+import StartPages from '../views/StartPagesView.vue'
+import { useHomeStore } from '../stores/home'
+
+const routes = [
+  {
+    path: '/',
+    name: 'default',
+    component: StartPages
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: () => import('../views/HomeView.vue')
+  },
+  {
+    path: '/information',
+    name: 'information',
+    component: () => import('../views/InformationView.vue')
+  },
+  {
+    path: '/discover',
+    name: 'discover',
+    component: () => import('../views/DiscoverView.vue')
+  },
+  {
+    path: '/user',
+    name: 'user',
+    component: () => import('../views/UserView.vue')
+  }
+  
+]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
-    }
-  ]
+  history: createWebHashHistory(),
+  routes,
 })
+
+
+
+// 添加全局后置守卫
+router.afterEach((to,from) => {
+  const homeStore = useHomeStore();
+
+  // 返回到 / 或 /startpages，执行 homeStore.close()
+  if (to.name === 'startpages' || to.name === 'default') {
+    homeStore.toggle();
+    
+  }
+});
 
 export default router

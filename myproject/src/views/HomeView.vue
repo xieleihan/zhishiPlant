@@ -1,9 +1,17 @@
+<template>
+    <div class="home">
+        <h3>这是homeview</h3>
+    </div>
+</template>
+
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+
 </script>
 
-<template>
-  <main>
-    <TheWelcome />
-  </main>
-</template>
+<style scoped lang="less">
+    .home{
+        width: 100%;
+        height: calc(100% - 70px);
+        background-color: skyblue;
+    }
+</style>
