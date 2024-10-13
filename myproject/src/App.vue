@@ -11,7 +11,7 @@ import layoutView from './LayoutView.vue';
 import { onMounted } from 'vue';
 
 onMounted(() => {
-  homeStore.close();
+  homeStore.open();
 })
 
 // import { storeToRefs } from 'pinia';

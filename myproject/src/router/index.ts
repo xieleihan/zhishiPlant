@@ -6,13 +6,13 @@ import { useHomeStore } from '../stores/home'
 const routes = [
   {
     path: '/',
-    name: 'default',
-    component: StartPages
+    redirect: '/startpages'
   },
   {
     path: '/home',
     name: 'home',
     component: () => import('../views/HomeView.vue')
+
   },
   {
     path: '/information',
@@ -22,12 +22,28 @@ const routes = [
   {
     path: '/discover',
     name: 'discover',
-    component: () => import('../views/DiscoverView.vue')
+    component:() => import('../views/DiscoverView.vue')
   },
   {
     path: '/user',
     name: 'user',
-    component: () => import('../views/UserView.vue')
+    component:() => import('../views/UserView.vue')
+
+  },
+  {
+    path: '/startpages',
+    name: 'startpages',
+    component: StartPages,
+  },
+  {
+    path: '/login',
+    name: 'login',
+    components: {StartPages:() => import('../views/secoundPages/LoginView.vue')}
+  },
+  {
+    path: '/register',
+    name: 'register',
+    components: {StartPages:() => import('../views/secoundPages/RegisterView.vue')}
   }
   
 ]
@@ -44,8 +60,8 @@ router.afterEach((to,from) => {
   const homeStore = useHomeStore();
 
   // 返回到 / 或 /startpages，执行 homeStore.close()
-  if (to.name === 'startpages' || to.name === 'default') {
-    homeStore.toggle();
+  if (to.name === 'startpages') {
+    homeStore.open();
     
   }
 });

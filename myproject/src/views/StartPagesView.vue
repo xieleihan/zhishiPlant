@@ -1,5 +1,5 @@
 <template>
-    <div class="start">
+    <div class="start" v-if="!isBigOpen">
         <div v-if="!isOpen" class="plant">
             <div class="itemBox" v-if="!isSmallOpen">
                 <div class="item"></div>
@@ -15,12 +15,13 @@
                 <p class="title">知识星球</p>
             </div>
             <div class="btnBox">
-                <button class="btn">登录</button>
-                <button class="btn">注册</button>
+                <router-link to="/login" class="btn" @click="goToLogin">登录</router-link>
+                <router-link to="/register" class="btn" @click="goToRegister">注册</router-link>
             </div>
             <span class="skip" @click="goToHome">Skip</span>
         </div>
     </div>
+    <router-view name="StartPages"></router-view>
 </template>
 
 <script setup lang="ts">
@@ -31,13 +32,22 @@ import { useHomeStore } from '../stores/home'
 const homeStore = useHomeStore();
 
 function goToHome() {
-    homeStore.toggle();
+    homeStore.close();
     // 跳转到home
     router.push({ name: 'home' });    
 }
 
+function goToLogin() {
+    isBigOpen.value = !isBigOpen.value;
+}
+
+function goToRegister() {
+    isBigOpen.value = !isBigOpen.value;
+}
+
 const isOpen = ref(false);
 const isSmallOpen = ref(false);
+const isBigOpen = ref(false);
 
 setTimeout(() => {
     isSmallOpen.value = true;
@@ -148,6 +158,9 @@ setTimeout(() => {
                     height: 50px;
                     margin-bottom: 10px;
                     border-radius: 20px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                     &:nth-child(1){
                         background-color: #4285f4;
                         color: white;
