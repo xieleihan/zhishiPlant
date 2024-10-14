@@ -10,9 +10,10 @@
                 <div class="text">验证码:</div>
                 <div class="passwordBox">
                     <input type="text" maxlength="6" placeholder="请输入验证码">
+                    <span class="send">发送验证码</span>
                 </div>
             </div>
-            <button>修改</button>
+            <button>验证所有者</button>
         </div>
     </div>
 </template>
@@ -46,7 +47,7 @@ function goTopView() {
             font-size: 30px;
 
             &:nth-child(2) {
-                margin-bottom: 10px;
+                margin-bottom: 40px;
             }
         }
 
@@ -69,6 +70,14 @@ function goTopView() {
             .passwordBox {
                 position: relative;
                 margin-top: 10px;
+                .send{
+                    position: absolute;
+                    top: 50%;
+                    right: 10px;
+                    text-wrap: nowrap;
+                    transform: translateY(-50%);
+                    color: @returnBtnBgColor;
+                }
             }
 
         }
@@ -78,7 +87,7 @@ function goTopView() {
             width: 100%;
             height: 50px;
             position: absolute;
-            margin-top: 10px;
+            margin-top: 30px;
             border-radius: @radius;
             border: 1px solid @returnBtnBgColor;
             background-color: white;
