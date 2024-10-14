@@ -4,18 +4,23 @@
             上传
             <img src="../assets/icon/宇宙星球.png" alt="">
         </div>
-        <div class="container"></div>
+        <div class="container">
+            <UploadImages />
+            <FromInput />
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-
+import UploadImages from '@/components/DiscoverCom/UploadImages.vue';
+import FromInput from '@/components/DiscoverCom/FromInput.vue';
 </script>
 
 <style scoped lang="less">
     .discover{
         width: 100%;
         height: 100%;
+        position: relative;
         .title{
             width: 100%;
             height: 50px;
@@ -38,8 +43,9 @@
         }
         .container{
             width: 100%;
+            top: 50px;
             padding: 0 20px;
-            margin-top: 50px;
+            position: absolute;
             height: calc(100% - 50px);
             background-color: #f3f7f8;
         }
