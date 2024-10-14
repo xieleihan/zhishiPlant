@@ -13,7 +13,8 @@ export const useHomeStore = defineStore({
     state: () => ({
         isOpen: false,
         isStartOpen: false,
-        isLoginOpen: false
+        isLoginOpen: false,
+        homelook: false
     }),
 
     // 设置状态
@@ -37,6 +38,12 @@ export const useHomeStore = defineStore({
         },
         loginClose() {
             this.isLoginOpen = false;
+        },
+        homeLookOpen() {
+            this.homelook = true;
+        },
+        homeLookClose() {
+            this.homelook = false;
         }
     }
 })

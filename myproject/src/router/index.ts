@@ -11,8 +11,14 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: () => import('../views/HomeView.vue')
-
+    component: () => import('../views/HomeView.vue'),
+    children: [
+      {
+        path: 'detail',
+        name: 'detail',
+        components: { look: () => import('../views/secoundPages/LookText.vue')}
+      }
+    ]
   },
   {
     path: '/information',

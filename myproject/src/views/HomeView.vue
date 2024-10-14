@@ -1,6 +1,6 @@
 <template>
     <keep-alive>
-        <div class="home">
+        <div class="home" v-if="!homeStore.homelook">
             <HomeTop />
             <div class="container">
                 <div class="banner">
@@ -17,6 +17,7 @@
             </div>
         </div>
     </keep-alive>
+    <router-view name="look"></router-view>
 </template>
 
 <script setup lang="ts">
@@ -25,6 +26,10 @@ import FunctionAreo from '@/components/FunctionAreo.vue';
 import DailyCom from '@/components/DailyCom.vue';
 import NewsCom from '@/components/NewsCom.vue';
 import YiyanCom from '@/components/YiyanCom.vue';
+
+// 导入pinia
+import { useHomeStore } from '../stores/home'
+const homeStore = useHomeStore();
 
 const images = [
     'https://picsum.photos/1920/1080?1',
@@ -41,7 +46,7 @@ const images = [
 @import "../public/main.less";
     .home{
         width: 100%;
-        height: calc(100% - 70px);
+        height: calc(100% - 10px);
         border-bottom: 1px solid #ccc;
         overflow-y: scroll;
         

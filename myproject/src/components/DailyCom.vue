@@ -3,7 +3,7 @@
         <p class="title"><span>每日日报</span></p>
         <ul class="containerBox">
             <div class="container">
-                <li v-for="(item, index) in dailyArr" :key="index"
+                <li @click="getUrl(item)" v-for="(item, index) in dailyArr" :key="index"
                     :style="`background: url(${item.images[0]});background-repeat:no-repeat;background-size:cover`">
                     <!-- <img :src="`${item.images[0]}`" alt="" /> -->
                     <div class="mask" :style="`background: linear-gradient(transparent, ${setColor(item.image_hue)});`">
@@ -31,9 +31,15 @@ function setColor(hex: string): string {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getUrl(item:any): void {
+    console.log(item.url) // 获取每周日报的URL
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function getDailyArr(): Promise<Array<any>> {
     try {
         const res = await axios.get('https://apis.netstart.cn/zhihudaily/stories/latest');
+        console.log(res);
         const length = res.data.stories.length;
         const arr = [];
         for (let i = 0; i < length; i++) {

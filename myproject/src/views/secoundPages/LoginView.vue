@@ -293,8 +293,8 @@
 <script setup lang="ts">
 import { useHomeStore } from '../../stores/home'
 const homeStore = useHomeStore();
-import StartReturnbtn from '@/components/StartReturnbtn.vue';
 import router from '@/router';
+import StartReturnbtn from '@/components/StartReturnbtn.vue';
 import { ref } from 'vue';
 import { onMounted } from 'vue';
 
