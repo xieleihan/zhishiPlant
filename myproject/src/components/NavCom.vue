@@ -44,6 +44,7 @@ const index = ref(0);
         bottom: 0;
         z-index: 996;
         
+        
         .item{
             width: 25%;
             height: 100%;

@@ -1,6 +1,8 @@
+// 样式文件
 import './public/base.css'
 import 'amfe-flexible'
 import 'vant/lib/index.css';
+import 'qweather-icons/font/qweather-icons.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
