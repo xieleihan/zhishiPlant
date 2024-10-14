@@ -12,7 +12,8 @@ export const useHomeStore = defineStore({
     // 定义存储对象
     state: () => ({
         isOpen: false,
-        isStartOpen: false
+        isStartOpen: false,
+        isLoginOpen: false
     }),
 
     // 设置状态
@@ -30,6 +31,12 @@ export const useHomeStore = defineStore({
         },
         startClose() {
             this.isStartOpen = false;
+        },
+        loginOpen() {
+            this.isLoginOpen = true;
+        },
+        loginClose() {
+            this.isLoginOpen = false;
         }
     }
 })

@@ -38,7 +38,14 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    components: {StartPages:() => import('../views/secoundPages/LoginView.vue')}
+    components: { StartPages: () => import('../views/secoundPages/LoginView.vue') },
+    children: [
+      {
+        path: 'format',
+        name: 'format',
+        components: { update: () => import('../views/secoundPages/FormatPassword.vue')}
+      }
+    ]
   },
   {
     path: '/register',
