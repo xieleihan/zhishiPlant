@@ -11,10 +11,11 @@ export const useHomeStore = defineStore({
     id: "home",
     // 定义存储对象
     state: () => ({
-        isOpen: false,
-        isStartOpen: false,
-        isLoginOpen: false,
-        homelook: false
+        isOpen: false, // 是否展示底部nav
+        isStartOpen: false, // 是否展示startpages
+        isLoginOpen: false, // 是否展示login
+        homelook: false, // 首页的router-view是否显示
+        title : ''
     }),
 
     // 设置状态
@@ -44,6 +45,9 @@ export const useHomeStore = defineStore({
         },
         homeLookClose() {
             this.homelook = false;
+        },
+        setTitle(title: string) {
+            this.title = title
         }
     }
 })

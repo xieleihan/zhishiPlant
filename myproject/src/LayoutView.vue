@@ -1,8 +1,6 @@
 <template>
     <div class="layout">
-        <keep-alive>
-            <router-view class="routerView"></router-view>
-        </keep-alive>
+        <router-view class="routerView"></router-view>
         <keep-alive>
             <NavCom />
         </keep-alive>

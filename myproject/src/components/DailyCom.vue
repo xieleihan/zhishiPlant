@@ -19,6 +19,11 @@
 <script setup lang="ts">
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
+import router from '../router/index';
+
+// 导入pinia
+import { useHomeStore } from '../stores/home'
+const homeStore = useHomeStore();
 
 function setColor(hex: string): string {
     // 将颜色字符串去掉前面的 "0x"
@@ -32,14 +37,19 @@ function setColor(hex: string): string {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getUrl(item:any): void {
-    console.log(item.url) // 获取每周日报的URL
+    // console.log(item.url) // 获取每周日报的URL
+    // homeStore.open();
+    // homeStore.startClose();
+    homeStore.homeLookOpen();
+    homeStore.setTitle(item.title);
+    router.push({ name: 'detail', query: { url: item.url } });
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function getDailyArr(): Promise<Array<any>> {
     try {
         const res = await axios.get('https://apis.netstart.cn/zhihudaily/stories/latest');
-        console.log(res);
+        // console.log(res);
         const length = res.data.stories.length;
         const arr = [];
         for (let i = 0; i < length; i++) {

@@ -14,7 +14,7 @@
                 <div class="item">
                     <img src="../../assets/icon/收藏.png" alt="">
                 </div>
-                <div class="item">
+                <div class="item" @click="openShare">
                     <img src="../../assets/icon/分享.png" alt="">
                 </div>
             </div>
@@ -25,10 +25,20 @@
 <script setup lang="ts">
 import router from '../../router/index';
 
+// 导入pinia
+import { useHomeStore } from '../../stores/home'
+const homeStore = useHomeStore();
+
 function goTopView(): void{
     // 还需要添加一个底部的恢复
-
+    homeStore.homeLookClose();
     router.go(-1);
+}
+
+// 打开分享
+const emit = defineEmits(['showShare']);
+function openShare(): void{
+    emit('showShare', true);
 }
 </script>
 
@@ -37,8 +47,8 @@ function goTopView(): void{
         width: 100%;
         height: 50px;
         display: flex;
-        position: fixed;
-        bottom: 0;
+        // position: fixed;
+        // top: 0;
         justify-content: center;
         align-items: center;
         background-color: #f6f6f6;
@@ -64,6 +74,7 @@ function goTopView(): void{
                 img {
                     width: 100%;
                     height: 100%;
+                    aspect-ratio: 1/1;
                 }
             }
     

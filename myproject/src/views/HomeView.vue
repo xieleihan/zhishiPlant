@@ -1,6 +1,6 @@
 <template>
-    <keep-alive>
-        <div class="home" v-if="!homeStore.homelook">
+    <div class="home-wrapper">
+        <div class="home" v-if="!homeStore.homelook" v-bind="$attrs">
             <HomeTop />
             <div class="container">
                 <div class="banner">
@@ -16,8 +16,10 @@
                 <NewsCom></NewsCom>
             </div>
         </div>
-    </keep-alive>
-    <router-view name="look"></router-view>
+        <div class="router-view-wrapper" v-if="homeStore.homelook">
+            <router-view name="look"></router-view>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -30,6 +32,12 @@ import YiyanCom from '@/components/YiyanCom.vue';
 // 导入pinia
 import { useHomeStore } from '../stores/home'
 const homeStore = useHomeStore();
+
+import { onMounted } from 'vue';
+
+onMounted(() => {
+    homeStore.homeLookClose();
+})
 
 const images = [
     'https://picsum.photos/1920/1080?1',
@@ -44,24 +52,37 @@ const images = [
 
 <style scoped lang="less">
 @import "../public/main.less";
-    .home{
+
+.home-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.home {
+    width: 100%;
+    height: calc(100% - 10px);
+    border-bottom: 1px solid #ccc;
+    overflow-y: scroll;
+
+    .container {
         width: 100%;
-        height: calc(100% - 10px);
-        border-bottom: 1px solid #ccc;
-        overflow-y: scroll;
-        
-        .container{
+        height: 200px;
+
+        .banner {
             width: 100%;
-            height: 200px;
-            .banner{
+            height: 100%;
+            margin-top: 70px;
+
+            img {
                 width: 100%;
                 height: 100%;
-                margin-top: 70px;
-                img{
-                    width: 100%;
-                    height: 100%;
-                }
             }
         }
     }
+}
+
+.router-view-wrapper {
+    width: 100%;
+    height: 100%;
+}
 </style>
