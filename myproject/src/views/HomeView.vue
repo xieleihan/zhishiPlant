@@ -10,6 +10,8 @@
                 </van-swipe>
             </div>
             <FunctionAreo></FunctionAreo>
+            <DailyCom></DailyCom>
+            <NewsCom></NewsCom>
         </div>
     </div>
 </template>
@@ -17,6 +19,8 @@
 <script setup lang="ts">
 import HomeTop from '@/components/HomeTop.vue';
 import FunctionAreo from '@/components/FunctionAreo.vue';
+import DailyCom from '@/components/DailyCom.vue';
+import NewsCom from '@/components/NewsCom.vue';
 
 const images = [
     'https://picsum.photos/1920/1080?1',

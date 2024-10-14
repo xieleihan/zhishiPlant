@@ -9,7 +9,7 @@
             </div>
             <div class="weatherRight">
                 <p>{{ temp }}°C</p>
-                <p>{{ city }}</p>
+                <p class="city">{{ city }}</p>
             </div>
         </div>
     </div>
@@ -28,10 +28,10 @@ onMounted(() => {
             const { latitude, longitude } = res.data;
             getCityInfo(latitude, longitude);
             getWeatherInfo(latitude, longitude);
-    }).catch(() => {
-        getCityInfo(22.27, 114.16);
-        getWeatherInfo(22.27, 114.16);
-    })
+        }).catch(() => {
+            getCityInfo(22.27, 114.16);
+            getWeatherInfo(22.27, 114.16);
+        });
 })
 
 // 获取城市函数
@@ -62,9 +62,11 @@ setInterval(updateTime, 1000);
 
 const date = ref(new Date().toLocaleString());
 const api_key: string = '7d2051100a0a467386d0cafa66e3ecb9'; // 定义一个和风天气的api_key,这里需要更换成自己的
+// 天气相关的变量
 let city: string;
 let iconnum: number;
 let temp: number;
+
 
 </script>
 
@@ -86,11 +88,30 @@ let temp: number;
             font-size: 18px;
             display: flex;
             align-items: center;
+            flex-wrap: nowrap;
+            text-wrap: nowrap;
         }
         .right{
-            width: 30%;
+            width: 34%;
             height: 100%;
-            background-color: skyblue;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .weatherLeft{
+                margin-right: 15px;
+                i{
+                    font-size: 40px;
+                }
+            }
+            .weatherRight{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                .city{
+                    margin-top: 5px;
+                }
+            }
         }
     }
 </style>

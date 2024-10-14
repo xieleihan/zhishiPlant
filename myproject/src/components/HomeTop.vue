@@ -1,7 +1,11 @@
 <template>
     <div class="top">
-        <input type="text" placeholder="请输入搜索关键字" />
-        <div class="avater"></div>
+        <div class="container">
+            <input type="text" placeholder="请输入搜索关键字" />
+            <div class="avater">
+                <van-icon name="user-o" />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -12,18 +16,25 @@
 <style scoped lang="less">
 @import "../public/main.less";
 
-    .top {
-        position: fixed;
-        top: 0;
-        left: 0;
+.top {
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+
+    .container {
         width: 100%;
-        height: 50px;
         display: flex;
-        margin-top: 10px;
         justify-content: space-between;
         align-items: center;
-        padding: 10px 20px;
-
+        height: 50px;
         input {
             border: 1px solid #ccc;
             width: 80%;
@@ -35,8 +46,12 @@
         .avater {
             width: 40px;
             height: 40px;
-            background-color: skyblue;
+            border: 1px solid #ccc;
             border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     }
+}
 </style>
