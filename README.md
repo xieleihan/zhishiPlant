@@ -5,7 +5,28 @@
 ## 技术栈
 
 - 前端
+
+	<div align="left">
+	  <img src="https://fastly.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg" height="45" alt="Vue3 logo"  />
+	  <img width="6" />
+	  <img src="https://fastly.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" height="45" alt="CSS3 logo"  />
+	  <img width="6" />
+	  <img src="https://fastly.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" height="45" alt="TypeScript logo"  />
+	  <img width="6" />
+	</div>
+
 - 后端
+
+	<div align="left">
+	  <img src="https://fastly.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" height="45" alt="nodejs logo"  />
+	  <img width="6" />
+	</div>
+
 - 数据库
+
+	<div align="left">
+	  <img src="https://fastly.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" height="45" alt="MySQL logo"  />
+	  <img width="6" />
+	</div>
 
 ## 项目介绍

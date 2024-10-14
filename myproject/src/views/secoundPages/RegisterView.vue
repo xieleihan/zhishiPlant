@@ -4,7 +4,7 @@
         <div class="container">
             <p class="title">注册</p>
             <p class="title">Register</p>
-            <p class="info">准备进入星球内部</p>
+            <p class="info">准备加入群星之中</p>
             <div class="inputBox">
                 <div class="text">用户名:</div>
                 <input type="text" placeholder="请输入用户名" />
