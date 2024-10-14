@@ -1,5 +1,5 @@
 <template>
-    <div class="start" v-if="!isBigOpen">
+    <div class="start" v-if="!homeStore.isStartOpen">
         <div v-if="!isOpen" class="plant">
             <div class="itemBox" v-if="!isSmallOpen">
                 <div class="item"></div>
@@ -38,16 +38,16 @@ function goToHome() {
 }
 
 function goToLogin() {
-    isBigOpen.value = !isBigOpen.value;
+    
+    homeStore.startOpen()
 }
 
 function goToRegister() {
-    isBigOpen.value = !isBigOpen.value;
+    homeStore.startOpen()
 }
 
 const isOpen = ref(false);
 const isSmallOpen = ref(false);
-const isBigOpen = ref(false);
 
 setTimeout(() => {
     isSmallOpen.value = true;
