@@ -18,24 +18,58 @@
                     <van-icon name="cross" />
                 </div>
                 <p>登录</p>
-                <input type="text" placeholder="请输入管理员账号">
-                <input type="password" placeholder="请输入密码">
+                <input type="text" placeholder="请输入管理员账号" v-model="username">
+                <input type="password" placeholder="请输入密码" v-model="password">
                 <div class="verificationBox">
-                    <input type="text" maxlength="4" placeholder="验证码">
+                    <input type="text" maxlength="4" placeholder="验证码" v-model="verifyCode">
                     <div v-html="imgSrc" @click="toggleImg"></div>
                 </div>
-                <button>验证</button>
+                <button @click="vercode">验证</button>
             </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import axios from 'axios'
+import { ref } from 'vue';
+import axios from 'axios';
+import { onMounted } from 'vue';
+import { showToast } from 'vant';
 
-const imgSrc = ref('')
-const isOpen: boolean = ref(false)
+function vercode(){
+    // console.log(sessionStorage.getItem('AUTO_TOKEN'))
+    if (verifyCode.value === ''){
+        showToast('请输入验证码');
+        return
+    }
+    axios.get(`https://frp-leg.top:26112/getVerInfo?code=${verifyCode.value}`).then((res) => {
+        console.log(res)
+        if (res.data.code === 200) {
+            axios.post('https://frp-leg.top:26112/public/adminlogin', { adminusername: username.value, adminuserpassword: password.value, admintoken: sessionStorage.getItem('AUTO_TOKEN') }).then((res) => {
+                console.log(res.data)
+                showToast('登录成功');
+                // 路由跳转
+            }).catch(() => {
+                showToast('登录失败');
+            })
+        } else {
+            showToast('验证码不正确');
+        }
+    }).catch(() => {
+        showToast('网络出现故障');
+    })
+    
+}
+
+onMounted(() => {
+    sessionStorage.setItem('AUTO_TOKEN',"$2b$10$QVsHYcoyzVf/F7Qg/8UQfeguZL.Q7JTIr28n2m13I2FbrAarkEUU6")
+})
+
+const imgSrc = ref('');
+const isOpen: boolean = ref(false);
+const username = ref('');
+const password = ref('');
+const verifyCode = ref('');
 
 const setDisplay = () => {
     isOpen.value = true;
@@ -44,9 +78,11 @@ const setDisplay = () => {
         imgSrc.value = res.data
     })
 }
+
 const noShow = () => {
     isOpen.value = false;
 }
+
 const toggleImg = () => {
     axios.get('https://frp-leg.top:26112/getinfo').then((res) => {
         // console.log(res.data)

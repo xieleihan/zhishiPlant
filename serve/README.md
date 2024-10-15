@@ -20,7 +20,54 @@ npm run start
 
 ## 详情
 
-### 登录注册
+### 管理员登录注册
+
+> #### 注册(一次性)
+>
+> 接口地址:`http://localhost:9008/public/adminregister`
+>
+> 方法:`POST`
+>
+> 参数:`adminusername`,`adminuserpassword`
+>
+> 实现的功能:
+>
+> - [x] 加密密码,创建一个时间戳的哈希化,做唯一参数值
+>
+> #### 登录
+>
+> 接口地址:`http://localhost:9008/public/adminlogin`
+>
+> 方法:`POST`
+>
+> 参数:`adminusername`,`adminuserpassword`,`admintoken`
+>
+> **注意:**`admintoken`从会话存储读取,然后发到后端去比对.
+>
+> #### 生成验证码(图片人机验证)
+>
+> 接口地址:`http://localhost:9008/getinfo`
+>
+> 方法:`GET`
+>
+> 返回参数:`SVG`图片,使用`v-html`进行渲染即可
+>
+> #### 比对验证码
+>
+> 接口地址: `http://localhost:9008/getVerInfo`
+>
+> 方法: `GET`
+>
+> 传递参数: `code`
+>
+> 接口示例:`http://localhost:9008/getVerInfo?code=Your_verCode`
+>
+> 实现功能:
+>
+> - [x] 实现两分钟验证码过期
+> - [ ] 验证码一次性过期
+
+### 用户登录注册
 
 > #### 注册
 >
