@@ -67,6 +67,16 @@ npm run start
 > - [x] 实现两分钟验证码过期
 > - [ ] 验证码一次性过期
 
+### 超级管理员功能
+
+> #### 查询用户列表
+>
+> 接口地址:`https://localhost:9008/super/getUsers`
+>
+> 方法:`POST`
+>
+> 参数:`token`(必须)
+
 ### 用户登录注册
 
 > #### 注册
@@ -156,5 +166,17 @@ npm run start
 > 请求头:key:`Authorization`,**value**:`cookie`获取的`token`
 >
 > 参数:`img`, `title`, `info`, `type`, `username`, `avater`, `likenum`, `other`, `commentid`
+
+### 系统状态
+
+> #### 获取服务器运行状态
+>
+> 接口地址:`https://localhost:9008/super/server-info`
+>
+> 方法:`GET`
+>
+> 返回JSON数据:包含`CPU`,`GPU(Intel和英伟达)`,`内存占用`
+>
+> 延时:`20S`,请前端请求的时候考虑服务器的压力,设置对应的时间
 
 # 未完待续

@@ -35,6 +35,10 @@ import { ref } from 'vue';
 import axios from 'axios';
 import { onMounted } from 'vue';
 import { showToast } from 'vant';
+import router from '../router/index';
+import { useHomeStore } from '../stores/home'
+
+const homeStore = useHomeStore();
 
 function vercode(){
     // console.log(sessionStorage.getItem('AUTO_TOKEN'))
@@ -49,8 +53,11 @@ function vercode(){
                 console.log(res.data)
                 showToast('登录成功');
                 // 路由跳转
-            }).catch(() => {
+                homeStore.close();
+                router.push({ name: 'Management' });
+            }).catch((err) => {
                 showToast('登录失败');
+                console.log(err)
             })
         } else {
             showToast('验证码不正确');
@@ -66,7 +73,7 @@ onMounted(() => {
 })
 
 const imgSrc = ref('');
-const isOpen: boolean = ref(false);
+const isOpen = ref<boolean>(false);
 const username = ref('');
 const password = ref('');
 const verifyCode = ref('');
