@@ -1,11 +1,16 @@
 <template>
   <div class="app">
-    <StartpagesView />
+    <StartpagesView v-if="homeStore.isOpen" />
+    <router-view></router-view>
   </div>
 </template>
 
 <script setup lang="ts">
 import StartpagesView from './views/StartpagesView.vue'
+
+import { useHomeStore } from './stores/home'
+
+const homeStore = useHomeStore();
 </script>
 
 <style scoped less>
