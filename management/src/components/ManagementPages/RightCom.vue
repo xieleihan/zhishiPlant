@@ -2,7 +2,9 @@
     <div class="rightcom">
         <StateCom />
         <div class="rightContainer">
-            <AccountManagement></AccountManagement>
+            <AccountManagement v-show="cell.isIndex === 0"></AccountManagement>
+            <ServerState v-show="cell.isIndex === 4"></ServerState>
+            <SendInfonation v-show="cell.isIndex === 3"></SendInfonation>
         </div>
         <div class="rightBottom">
             <van-notice-bar left-icon="volume-o" text="请谨慎操作上面的数据,数据丢失无价,后台不做任何备份." />
@@ -11,8 +13,13 @@
 </template>
 
 <script setup lang="ts">
+import { useCellStore } from '@/stores/cell';
+const cell = useCellStore();
+
 import StateCom from './StateCom.vue';
 import AccountManagement from './AccountManagement.vue';
+import ServerState from './ServerState.vue';
+import SendInfonation from './SendInfonation.vue';
 </script>
 
 <style scoped lang="less">

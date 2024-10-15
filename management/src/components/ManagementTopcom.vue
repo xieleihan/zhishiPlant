@@ -6,6 +6,7 @@
         </div>
         <div class="rightBox">
             <div class="left">
+                <span class="nowdate">{{ date }}</span>
                 <img src="../assets/icon/用户.png" alt="">
                 <span>Administer</span><span>,你好</span>
             </div>
@@ -17,7 +18,13 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 
+const intervalId = setInterval(() => {
+    date.value = new Date().toLocaleString();
+}, 1000);
+
+const date = ref(new Date().toLocaleString());
 </script>
 
 <style scoped lang="less">
@@ -56,6 +63,9 @@
                 align-items: center;
                 margin-right: 20px;
                 color: white;
+                .nowdate{
+                    margin-right: 20px;
+                }
                 img{
                     margin-right: 10px;
                     width: 25px;

@@ -7,20 +7,13 @@
                 <div class="name">用户密码</div>
                 <div class="name">操作区域</div>
             </li>
-            <li>
-                <div class="info">111</div>
-                <div class="info">111@11.com</div>
-                <div class="info">111</div>
+            <!-- 下面的一个是示例 -->
+            <li v-for="(item,index) in queryList" :key="index">
+                <div class="info">{{ item.username }}</div>
+                <div class="info">{{ item.useremail }}</div>
+                <div class="info">{{ item.userpassword }}</div>
                 <div class="info">
-                    <button v-for="(item,index) in list" :key="index">{{ item.name }}</button>
-                </div>
-            </li>
-            <li>
-                <div class="info">111</div>
-                <div class="info">111@11.com</div>
-                <div class="info">111</div>
-                <div class="info">
-                    <button v-for="(item, index) in list" :key="index">{{ item.name }}</button>
+                    <button v-for="(button, idx) in list" :key="idx">{{ button.name }}</button>
                 </div>
             </li>
         </ul>
@@ -28,7 +21,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
+import { onMounted } from 'vue';
+import axios from 'axios';
+
+onMounted(() => {
+    const token = sessionStorage.getItem('AUTO_TOKEN')
+    axios.post('https://frp-leg.top:26112/super/getUsers',{"token":token}).then((res) => {
+        // console.log(res.data)
+        queryList.value = res.data.data
+        console.log(queryList)
+    }).catch(() => {
+        console.log('网络出现故障')
+    })
+})
+
+let queryList = ref<any[]>([]); 
+
 const list = ref([
         {
             name: "修改",

@@ -1,8 +1,32 @@
 <template>
     <div class="state">
         <div class="stateContainer clearfix">
-            <div class="card fl">
+            <div :class="cell.isIndex === 0 ? 'active':''" class="card fl">
                 账户管理
+                <div class="icon">
+                    <van-icon name="close" />
+                </div>
+            </div>
+            <div :class="cell.isIndex === 1 ? 'active':''" class="card fl">
+                信息管理
+                <div class="icon">
+                    <van-icon name="close" />
+                </div>
+            </div>
+            <div :class="cell.isIndex === 2 ? 'active':''" class="card fl">
+                首页添加
+                <div class="icon">
+                    <van-icon name="close" />
+                </div>
+            </div>
+            <div :class="cell.isIndex === 3 ? 'active':''" class="card fl">
+                发送信息
+                <div class="icon">
+                    <van-icon name="close" />
+                </div>
+            </div>
+            <div :class="cell.isIndex === 4 ? 'active' : ''" class="card fl">
+                服务器状态
                 <div class="icon">
                     <van-icon name="close" />
                 </div>
@@ -12,7 +36,8 @@
 </template>
 
 <script setup lang="ts">
-
+import { useCellStore } from '@/stores/cell';
+const cell = useCellStore();
 </script>
 
 <style scoped lang="less">
@@ -45,6 +70,11 @@
                 background-color: @themeColor;
                 position: relative;
                 margin-right: 8px;
+                &.active{
+                    background-color: white;
+                    color: @themeColor;
+                    border: 1px solid @themeColor;
+                }
                 &:last-child{
                     margin-right: 0;
                 }
