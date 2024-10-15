@@ -1,0 +1,26 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'zk';
+    font-size: 16px;
+}
+li,ul,ol{
+    list-style: none;
+}
+a{
+    text-decoration: none;
+}
+@font-face {
+    font-family: 'zk';
+    src: url('../assets/font-family/zk.ttf' ) format('truetype');
+}
+button{
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+input{
+    outline: none;
+}
