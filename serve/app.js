@@ -51,6 +51,24 @@ app.get('/proxy', async (req, res) => {
   }
 });
 
+// proxy
+app.get('/proxyip', async (req, res) => {
+    try {
+	// mainland: https://myip.ipip.net/json
+	// hongkong: https://ipapi.co/json/
+        const response = await axios.get('https://myip.ipip.net/json');
+        res.send({
+            "code": 200,
+            "data": response.data
+        });
+    } catch (error) {
+        res.send({
+            "code": 500,
+            "message": "ERROR"
+        });
+    }
+});
+
 let vercode;
 
 // 随机生成验证码图片
@@ -102,7 +120,11 @@ const registerRouter = require('./router/register');
 const authenticateToken = require('./authorization/index');
 const publicRouter = require('./router/public');
 const homeinfoRouter = require('./router/homeinfo');
+const superadmin = require('./router/superadmin')
+const windowsRouter = require('./router/windows')
 app.use(express.json());
+app.use('/super',superadmin)
+app.use('/super',windowsRouter)
 app.use('/public',registerRouter)
 app.use('/public',publicRouter)
 app.use('/protected/*',authenticateToken.verifyToken)
@@ -116,4 +138,4 @@ const server = app.listen(port, () => {
     console.log('http://loaclhost:' + port);
 })
 
-server.setTimeout(10000);
+server.setTimeout(100000);
