@@ -1,6 +1,16 @@
 create database springboot;
 use springboot;
 
+-- 管理员
+drop table if exists `adminuser`;
+create table adminuser(
+	id int auto_increment primary key,
+    adminusername varchar(50) Not null,
+    adminuserpassword varchar(100) not null,
+    admintoken varchar(500)
+);
+select * from adminuser;
+
 -- 用户表 
 drop table if exists `user`;
 CREATE TABLE user (
