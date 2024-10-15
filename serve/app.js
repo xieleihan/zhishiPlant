@@ -4,6 +4,9 @@ const express = require('express')
 const cors = require('cors')
 const path = require('path')
 const bodyParser = require('body-parser')
+const axios = require('axios')
+const svgCaptcha = require('svg-captcha')
+
 // 创建程序
 const app = express()
 
@@ -28,13 +31,82 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
+// 定义允许的域名列表
+
+app.get('/proxy', async (req, res) => {
+  let { url } = req.query;
+	// console.log(url)
+  
+
+  try {
+    // 发送请求到目标 URL
+    const response = await axios.get(url);
+    res.send({
+      "code": 200,
+      "data": "+response.data+"
+    });
+  } catch (error) {
+    console.error('Error occurred while fetching data:', error.message);
+    res.status(500).send('Error occurred while fetching data');
+  }
+});
+
+let vercode;
+
+// 随机生成验证码图片
+app.get('/getInfo', (req, res) => {
+ // 下面这行代码是随机生成验证码图片和文本并返回给客户端 
+  const img = svgCaptcha.create({ 
+    size: 4, // 验证码长度
+    ignoreChars: '0o1i', // 验证码字符中排除 0o1i
+    color: true, // 验证码是否有彩色
+    noise: 1, //干扰线
+    background: '#666' // 背景颜色
+  })
+  console.log(img.text);
+  vercode = img.text;
+  setTimeout(()=>{
+	  vercode = '';
+  },120000)
+  res.send(img.data);
+})
+
+app.get('/getVerInfo',(req,res) => {
+	let {code} = req.query;
+	try{
+		if(vercode === ''){
+			res.send({
+				"code": 500,
+				"message": "Timeout"
+			})
+		}
+		else if(code === vercode){
+			res.send({
+				"code": 200,
+				"message": "Success"
+			})
+		}else{
+			res.send({
+				"code":500,
+				"message":"no code"
+			})
+		}
+	}catch(err){
+		 res.status(500).send('Error occurred while fetching data');
+	}
+})
+
 const userRouter = require('./router/user');
 const registerRouter = require('./router/register');
 const authenticateToken = require('./authorization/index');
+const publicRouter = require('./router/public');
+const homeinfoRouter = require('./router/homeinfo');
 app.use(express.json());
 app.use('/public',registerRouter)
+app.use('/public',publicRouter)
 app.use('/protected/*',authenticateToken.verifyToken)
 app.use('/protected', userRouter)
+app.use('/protected',homeinfoRouter)
 
 // 设置端口
 const port = 9008
@@ -43,4 +115,4 @@ const server = app.listen(port, () => {
     console.log('http://loaclhost:' + port);
 })
 
-server.setTimeout(5000);
+server.setTimeout(10000);
