@@ -7,6 +7,101 @@ const {generateToken} = require('../authorization/index');
 
 // 定义盐的轮次，用于加密
 const saltRounds = 10;
+const tokensaltRounds = 10;
+
+let vercode= '$2b$10$QVsHYcoyzVf/F7Qg/8UQfeguZL.Q7JTIr28n2m13I2FbrAarkEUU6';
+let verdate;
+
+router.post('/adminregister', async (req, res) => {
+    let { adminusername, adminuserpassword } = req.body;
+	// console.log(adminusername,adminuserpassword)
+	
+
+    // 对密码进行加密处理
+    try {
+		const dateToken = new Date().getTime().toString();
+		verdate = dateToken;
+		// console.log(dateToken)
+		// console.log("open1")
+        const hashedPassword = await bcrypt.hash(adminuserpassword, saltRounds);
+		// console.log("open2",hashedPassword)
+		const hashToken = await bcrypt.hash(dateToken,tokensaltRounds);
+		// console.log("open3",hashToken)
+		vercode = hashToken;
+        let sql = `insert into adminuser (adminusername,adminuserpassword,admintoken) values ('${adminusername}','${hashedPassword}','${hashToken}')`;
+		// console.log(sql)
+        db.query(sql).then(result => {
+            res.send({
+                code: 200,
+                message: '注册成功',
+                data: result,
+				token: vercode
+            });
+        }).catch(err => {
+            res.send({
+                code: 500,
+                message: '注册失败',
+                data: err
+            });
+        });
+    } catch (error) {
+        res.send({
+            code: 500,
+            message: '密码加密失败',
+            data: error
+        });
+    }
+});
+
+router.post('/adminlogin', async (req, res) => {
+    let { adminusername, adminuserpassword,admintoken } = req.body;
+	if(admintoken !== vercode){
+		res.send({
+			"code":500,
+			"message":"no date"
+		})
+		return;
+	}
+
+    let sql = `SELECT * FROM adminuser WHERE adminusername = '${adminusername}'`;
+	// console.log("request1")
+    db.query(sql).then(async (result) => {
+		console.log("request2",result)
+        if (result.length > 0) {
+            const user = result[0];
+			console.log("request3",user)
+            // 验证密码
+			console.log(adminuserpassword, user.adminuserpassword,adminuserpassword === user.adminuserpassword)
+            const match = await bcrypt.compare( adminuserpassword, user.adminuserpassword);
+			console.log(match)
+            if (match) {
+                res.send({
+					
+                    code: 200,
+                    message: '登录成功',
+                    token: vercode,  // 返回生成的 token
+                    data: user
+                });
+            } else {
+                res.send({
+                    code: 400,
+                    message: '密码错误'
+                });
+            }
+        } else {
+            res.send({
+                code: 404,
+                message: '用户不存在'
+            });
+        }
+    }).catch(err => {
+        res.send({
+            code: 500,
+            message: '登录失败',
+            data: err
+        });
+    });
+});
 
 router.post('/register', async (req, res) => {
     let { username, useremail, userpassword } = req.body;

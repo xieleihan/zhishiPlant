@@ -60,12 +60,13 @@ app.get('/getInfo', (req, res) => {
     size: 4, // 验证码长度
     ignoreChars: '0o1i', // 验证码字符中排除 0o1i
     color: true, // 验证码是否有彩色
-    noise: 1, //干扰线
+    noise: 3, //干扰线
     background: '#666' // 背景颜色
   })
   console.log(img.text);
   vercode = img.text;
-  setTimeout(()=>{
+  clearTimeout(timeoutId)
+  var timeoutId = setTimeout(()=>{
 	  vercode = '';
   },120000)
   res.send(img.data);
@@ -77,18 +78,18 @@ app.get('/getVerInfo',(req,res) => {
 		if(vercode === ''){
 			res.send({
 				"code": 500,
-				"message": "Timeout"
+				"message": "验证码时间超时Timeout"
 			})
 		}
 		else if(code === vercode){
 			res.send({
 				"code": 200,
-				"message": "Success"
+				"message": "验证码正确Success"
 			})
 		}else{
 			res.send({
 				"code":500,
-				"message":"no code"
+				"message":"验证码错误no code"
 			})
 		}
 	}catch(err){
