@@ -8,6 +8,7 @@ const emailApi = require('./emailApi');
 router.get('/send', async (req,res)=> {
     // 接收qq邮箱
     let { email } = req.query;
+	console.log(email)
     // 调用api把验证码发送到邮箱
     await emailApi.getEmailCode(email)
     .then(

@@ -1,5 +1,6 @@
 // require() 导入/加载
 // 导包
+require('dotenv').config({path: './public/.env'});
 const express = require('express')
 const cors = require('cors')
 const path = require('path')
