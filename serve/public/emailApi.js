@@ -4,9 +4,10 @@ const path = require('path');
 const sendEmail = require('./sendEmail');
 // 生成ID
 const { v4: uuidv4 } = require('uuid');
+const crypto = require('crypto');
 const qq = require('./qq');
 // 导入已封装的数据函数
-const db = require('../../config/db');
+const db = require('../db/database');
 const PROJECT_NAME = qq.name;
 const FROM_EMAIL = qq.email;//开发者邮箱
 
