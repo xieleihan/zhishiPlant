@@ -15,6 +15,11 @@ const routes = [
     path: '/management',
     name: 'Management',
     component: () => import('../views/ManagementView.vue')  // 这里使用 component 而不是 components
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import('../views/ErrorpagesView.vue')
   }
 ];
 

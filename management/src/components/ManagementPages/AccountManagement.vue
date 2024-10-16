@@ -5,7 +5,10 @@
                 <div class="name">用户名</div>
                 <div class="name">用户邮箱</div>
                 <div class="name">用户密码</div>
-                <div class="name">操作区域</div>
+                <div class="name">
+                    <span>操作区域</span>
+                    <button @click="showPopup">新增</button>
+                </div>
             </li>
             <!-- 下面的一个是示例 -->
             <li v-for="(item,index) in queryList" :key="index">
@@ -17,6 +20,7 @@
                 </div>
             </li>
         </ul>
+        <van-popup v-model:show="showCenter" round :style="{ padding: '64px' }" />
     </div>
 </template>
 
@@ -37,6 +41,11 @@ onMounted(() => {
 })
 
 let queryList = ref<any[]>([]); 
+
+const show = ref(false);
+const showPopup = () => {
+    show.value = true;
+};
 
 const list = ref([
         {
@@ -76,6 +85,14 @@ const list = ref([
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    button{
+                        width: calc(100% / 3 - 40px);
+                        height: 30px;
+                        border-radius: @radius;
+                        color: white;
+                        background-color: @googleYellow;
+                        margin-left: 10px;
+                    }
                 }
                 .info{
                     width: calc(100% / 4);
