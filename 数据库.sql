@@ -97,3 +97,11 @@ create table shopping(
     shopsort varchar(20) -- 店铺分类
 );
 select * from shopping;
+
+-- 邮箱验证码
+drop table if exists `db_email_code`;
+create table db_email_code(
+	id int auto_increment primary key,
+    client_email varchar(50) not null
+);
+select * from db_email_code;

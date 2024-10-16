@@ -1,5 +1,10 @@
+require('dotenv').config({path: './.env'});
+
+const email = process.env.email
+const password = process.env.password
+
 module.exports = {
-    email: '开发者/平台@qq.com',
-    name: '项目名称',
-    pass: '授权码'
+    email: email,
+    name: '知识星球',
+    pass: password
 }

@@ -1,7 +1,7 @@
 // 处理邮箱的请求
 const router = require('express').Router();
 // 导入处理邮箱的模块
-const emailApi = require('../../common/email/emailApi');
+const emailApi = require('./emailApi');
 
 // 发送QQ邮箱验证码的接口
 // URL:  /api/email/send

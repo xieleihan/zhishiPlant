@@ -122,7 +122,9 @@ const publicRouter = require('./router/public');
 const homeinfoRouter = require('./router/homeinfo');
 const superadmin = require('./router/superadmin')
 const windowsRouter = require('./router/windows')
+const emailRouter = require('./public/httpapi.js')
 app.use(express.json());
+app.use('/email',emailRouter)
 app.use('/super',superadmin)
 app.use('/super',windowsRouter)
 app.use('/public',registerRouter)
