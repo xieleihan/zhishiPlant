@@ -11,6 +11,7 @@ const qq = require('./qq');
 const email = qq.email;
 // 填写授权码
 const pass = qq.pass;
+console.log(pass)
 
 // 创建一个smtp服务器 // 创建一个smtp客户端对象
 const transporter = nodeemailer.createTransport({

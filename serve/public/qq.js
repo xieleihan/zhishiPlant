@@ -1,10 +1,12 @@
 require('dotenv').config({path: './.env'});
 
 const email = process.env.email
-const password = process.env.password
+const pass = process.env.pass
+console.log(process.env)
+console.log(email,pass)
 
 module.exports = {
     email: email,
     name: '知识星球',
-    pass: password
+    pass: pass
 }
