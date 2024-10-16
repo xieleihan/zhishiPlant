@@ -77,6 +77,30 @@ npm run start
 >
 > 参数:`token`(必须)
 
+### 邮箱验证码
+
+
+
+> #### 发送验证码
+>
+> 接口地址:`https://localhost:9008/email/send`
+>
+> 方法:`GET`
+>
+> 参数:`email`
+>
+> #### 验证验证码
+>
+> 接口地址:`http://localhost:9008/email/verify`
+>
+> 方法:`GET`
+>
+> 参数: `email`,`email_code`
+>
+> ##### 上面两个实现的功能
+>
+> - [x] 做了能做的安全性和稳定性功能
+
 ### 用户登录注册
 
 > #### 注册
