@@ -7,7 +7,7 @@ const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
 const qq = require('./qq');
 // 导入已封装的数据函数
-const db = require('../db/database');
+const db = require('../db/index');
 const PROJECT_NAME = qq.name;
 const FROM_EMAIL = qq.email;//开发者邮箱
 
@@ -19,44 +19,52 @@ class Email {
     static delay = null;
     // 发送邮件
     static getEmailCode(client_email) {
+		console.log("来到这里了,发送邮件")
         return new Promise((resolve,reject)=>{
             // 生成验证码
             // let email_code = Math.random().toString().slice(-6);
             let email_code = Math.random().toString().slice(-6);//四位随机数
             // id
             let code_id = uuidv4();
+			console.log(email_code,code_id)
             //随机生成6位数字
             let email = {
                 title: `${PROJECT_NAME}---邮箱验证码`,
-                body: `
-                        <h1>您好：</h1>
-                        <p style="font-size: 18px;color:#000;">
-                            您的验证码为：
-                            <span style="font-size: 16px;color:#f00;"><b>${email_code}</b>,</span>
-                            <p>您当前正在${PROJECT_NAME}账号，验证码告知他人将会导致数据信息被盗，请勿泄露!</p>
-                        </p>
-                        <p style="font-size: 1.5rem;color:#999;">60秒内有效</p>
-                        <script>
-                            console.log('test')
-                        </script>
-                        `
+                body: 
+`
+<div style="width: 400px;height: 50px;display: flex;flex-direction: row ;align-items: center;">
+<img style="width:50px;height:50px;margin-right: 10px;" src="https://github.com/xieleihan/QingluanSearch-AndroidDev/raw/main/peacock_flat.png" alt="" />
+<span style="font-weight: bold;font-family: kaiti;">知识星球  <span style="font-family: kaiti;letter-spacing: 15px;color: #ccc;display: block;margin-left: 10px;font-size: 12px;">一个知识分享平台</span></span>
+</div>
+<h1>您好：</h1>
+<p style="font-size: 18px;color:#000;">
+您的验证码为：
+<span style="font-size: 16px;color:#f00;"><b>${email_code}</b>,</span>
+<p>您当前正在登录${PROJECT_NAME}的管理员账号，验证码告知他人将会导致数据信息被盗，请勿泄露!
+</p >
+<p>他人之招,谨防上当受骗,12345是官方客服唯一电话.</p >
+</p >
+<p style="font-size: 1.5rem;color:#999;">3分钟内有效</p >
+`
             }
+			console.log(email)
             let emailCotent = {
                 from: FROM_EMAIL, // 发件人地址
                 to: `${client_email}`, // 收件人地址，多个收件人可以使用逗号分隔
                 subject: email.title, // 邮件标题
                 html: email.body // 邮件内容
             }
-            // console.log('x.5',client_email)
+			console.log(emailCotent)
+            console.log('x.5',client_email)
             // 做多一层判断，判断是否重复发送验证码
             let sql = `select client_email from db_email_code where client_email='${client_email}'`;
             // let sql = `select client_email from db_email_code where client_email='${client_email}'`;
             db.query(sql)
             .then(
                 async (rows)=>{
-                    // console.log("x.2",rows)
+                    console.log("x.2",rows)
                     if(rows.length >= 1){
-                        // console.log("已经发送过验证码")
+                        console.log("已经发送过验证码")
                         resolve({
                             code: 1,
                             msg: '已发送验证码,请勿重复发送。60秒后重新发送。'
@@ -92,7 +100,7 @@ class Email {
                                     Email.removeEmailCode(client_email)
                                     clearTimeout(Email.delay);
                                     Email.delay = null;
-                                }, 60 * 1000)
+                                }, 60 * 1000 * 3)
                             },
                             ()=> {
                                 // console.log("发送邮箱验证发生异常。")
@@ -171,16 +179,17 @@ class Email {
 
     // 判断邮箱的验证码是否是过期(是否有该验证码)
     static async verifyEmailCode(client_email,email_code){
-        // console.log('x.1',{client_email,email_code})
+        console.log('x.1',{client_email,email_code})
          // 判断邮箱和验证码是否匹配
          return new Promise((resolve,reject)=>{
             // 执行查询数据的sql语句
             let sql = `select client_email from db_email_code where client_email = '${client_email}' and email_code='${email_code}'`;
+			console.log(sql)
             db.query(sql)
             .then(
                 rows=>{
-                    // console.log("x.3",rows)
-                    // console.log("x.4",rows.length)
+                    console.log("x.3",rows)
+                    console.log("x.4",rows.length)
                     if(rows.length === 1){
                         resolve({
                             code: 200,
@@ -189,7 +198,7 @@ class Email {
                        
                     }
                     else {
-                        // console.log('x.2',{client_email,email_code})
+                        console.log('x.2',{client_email,email_code})
                         resolve({
                             code: -1,
                             msg: '邮箱验证失败1111。'
