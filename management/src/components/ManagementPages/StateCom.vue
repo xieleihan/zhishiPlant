@@ -31,13 +31,29 @@
                     <van-icon name="close" />
                 </div>
             </div>
+            <div class="inputBox">
+                <img src="../../assets/icon/Search.png" alt="">
+                <input v-model="value" type="text" placeholder="请输入搜索内容">
+            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue';
+
 import { useCellStore } from '@/stores/cell';
+import { useAccountStore } from '@/stores/accountdata';
 const cell = useCellStore();
+const account = useAccountStore();
+
+
+const value = ref('');
+
+watch(() => value.value, (newVal) => {
+    account.setSearchString(newVal);
+    account.log();
+})
 </script>
 
 <style scoped lang="less">
@@ -54,12 +70,14 @@ const cell = useCellStore();
         transform: translateX(-50%);
         border: 1px solid @themeColor;
         // border-radius: @radius;
-        overflow: hidden;
+        // overflow: hidden;
         .stateContainer{
             height: 30px;
+            width: 100%;
             // min-width: 100%;
-            overflow-x: scroll;
+            // overflow-x: scroll;
             color: white;
+            position: relative;
             .card{
                 cursor: default;
                 width: 100px;
@@ -93,6 +111,30 @@ const cell = useCellStore();
                     height: 10px;
                     text-align: center;
                     line-height: 10px;
+                }
+            }
+            .inputBox{
+                width: 300px;
+                height: 10px;
+                position: absolute;
+                right: 0px;
+                top: 50%;
+                transform: translateY(-50%);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: transparent;
+                input{
+                    width: 100%;
+                    height: 30px;
+                    padding-left: 25px;
+                    color: black;
+                }
+                img{
+                    width: 20px;
+                    height: 20px;
+                    position: absolute;
+                    left: 5px;
                 }
             }
         }
