@@ -50,8 +50,9 @@ function vercode(){
         console.log(res)
         if (res.data.code === 200) {
             axios.post('https://frp-leg.top:26112/public/adminlogin', { adminusername: username.value, adminuserpassword: password.value, admintoken: sessionStorage.getItem('AUTO_TOKEN') }).then((res) => {
-                console.log(res.data)
+                console.log(res.data.token)
                 showToast('登录成功');
+                sessionStorage.setItem('token', res.data.token);
                 // 路由跳转
                 homeStore.close();
                 router.push({ name: 'Management' });

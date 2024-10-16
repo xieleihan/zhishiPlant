@@ -10,7 +10,7 @@
                 <img src="../assets/icon/用户.png" alt="">
                 <span>Administer</span><span>,你好</span>
             </div>
-            <div class="right">
+            <div class="right" @click="showLogoutDialog">
                 <img src="../assets/icon/logout.png" alt="">
             </div>
         </div>
@@ -19,6 +19,33 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import router from '../router/index';
+import { useHomeStore } from '../stores/home'
+
+const homeStore = useHomeStore();
+
+import { showConfirmDialog, showToast } from 'vant';
+
+const showLogoutDialog = () => {
+    showConfirmDialog({
+        title: '确认退出',
+        message: '你确定要退出吗？',
+    })
+        .then(() => {
+            // 用户确认操作后的逻辑
+            showToast('Administer,退出程序中...');
+            sessionStorage.removeItem('token');
+            const timeoutId = setTimeout(() => {
+                showToast('Administer,退出成功');
+                router.push('/startpages');
+            },2000)
+            homeStore.open();
+        })
+        .catch(() => {
+            // 用户取消操作后的逻辑
+            showToast('Administer,你已取消退出程序');
+        });
+};
 
 const intervalId = setInterval(() => {
     date.value = new Date().toLocaleString();
@@ -65,11 +92,18 @@ const date = ref(new Date().toLocaleString());
                 color: white;
                 .nowdate{
                     margin-right: 20px;
+                    cursor: default;
                 }
                 img{
                     margin-right: 10px;
                     width: 25px;
                     height: 25px;
+                    cursor: pointer;
+                }
+            }
+            .right{
+                img{
+                    cursor: pointer;
                 }
             }
         }

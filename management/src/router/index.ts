@@ -23,4 +23,17 @@ const router = createRouter({
   routes,
 });
 
+// router全局前置守卫
+router.beforeEach((to, from, next) => {
+  if (to.path === '/management') {
+    // sessionStorage 中如果没有 'token'，或者它是空字符串，应该跳转到 '/startpages'
+    const token = sessionStorage.getItem('token');
+    if (!token) {
+      return next({ path: '/startpages' });
+    }
+  }
+  // 继续执行导航
+  next();
+});
+
 export default router;

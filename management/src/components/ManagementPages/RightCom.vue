@@ -5,6 +5,8 @@
             <AccountManagement v-show="cell.isIndex === 0"></AccountManagement>
             <ServerState v-show="cell.isIndex === 4"></ServerState>
             <SendInfonation v-show="cell.isIndex === 3"></SendInfonation>
+            <HomeinfoManagement v-show="cell.isIndex === 2"></HomeinfoManagement>
+            <TrueHomeinfomanagement v-show="cell.isIndex === 1"></TrueHomeinfomanagement>
         </div>
         <div class="rightBottom">
             <van-notice-bar left-icon="volume-o" text="请谨慎操作上面的数据,数据丢失无价,后台不做任何备份." />
@@ -20,6 +22,8 @@ import StateCom from './StateCom.vue';
 import AccountManagement from './AccountManagement.vue';
 import ServerState from './ServerState.vue';
 import SendInfonation from './SendInfonation.vue';
+import HomeinfoManagement from './HomeinfoManagement.vue';
+import TrueHomeinfomanagement from './TrueHomeinfomanagement.vue';
 </script>
 
 <style scoped lang="less">
