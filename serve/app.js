@@ -11,16 +11,24 @@ const svgCaptcha = require('svg-captcha')
 // 创建程序
 const app = express()
 
+// 增加请求体大小限制（例如设置为 50MB） 
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
 const db = require('./db/index.js')
 
 // 使用中间件
 // app.use(cors())
 app.use(cors({
     origin: '*', // 只允许来自这个域名的请求
-    methods: 'GET,POST,PUT,DELETE', // 允许的HTTP方法
+    methods: 'GET,POST,PUT,DELETE,OPTIONS', // 允许的HTTP方法
     allowedHeaders: 'Content-Type,Authorization', // 允许的自定义头
     expressHeaders: 'Content-Type,Authorization', // 允许的自定义头
+	credentials: true, 
 }))
+// 处理 OPTIONS 请求
+// app.options('*', cors(corsOptions));
+
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -124,7 +132,13 @@ const homeinfoRouter = require('./router/homeinfo');
 const superadmin = require('./router/superadmin')
 const windowsRouter = require('./router/windows')
 const emailRouter = require('./public/httpapi.js')
+// const AiRouter = require('./router/AiRouter')
+const BaiduaiRouter = require('./router/BaiduaiRouter')
+const UploadRouter = require('./router/UploadDocument')
+app.use(UploadRouter)
 app.use(express.json());
+// app.use(AiRouter)
+app.use(BaiduaiRouter)
 app.use('/email',emailRouter)
 app.use('/super',superadmin)
 app.use('/super',windowsRouter)
