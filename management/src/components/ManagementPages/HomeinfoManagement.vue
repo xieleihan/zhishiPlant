@@ -2,27 +2,93 @@
     <div class="homeinfo">
         <van-uploader v-model="fileList" multiple :max-count="5" />
 
-        <input class="HomeTitle" type="text" placeholder="请输入标题">
+        <input v-model="title" class="HomeTitle" type="text" placeholder="请输入标题">
 
-        <textarea class="HomeTextarea" name="" id="" placeholder="请输入文章"></textarea>
+        <textarea v-model="desc" class="HomeTextarea" name="" id="" placeholder="请输入文章"></textarea>
 
         <TypeBox />
 
         <div class="btnBox">
-            <button class="submit">提交</button>
+            <button @click="sendHomedb" class="submit">提交</button>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch, toRaw } from 'vue';
 import TypeBox from './TypeBox.vue';
+import axios from 'axios';
+import { useTypeStore } from '@/stores/type';
+const typeStore = useTypeStore();
+
+function sendHomedb() {
+    // @ts-ignore
+    console.log(img, title, desc, type, username, avater, likenum, other, commentid);
+    const payload = {
+        // @ts-ignore
+        img: toRaw(img), // 转换响应式数据为普通数据
+        title: toRaw(title.value),
+        info: toRaw(desc.value),
+        type: toRaw(type.value),
+        username: toRaw(username),
+        avater: toRaw(avater),
+        likenum: toRaw(likenum),
+        other: toRaw(other),
+        commentid: toRaw(commentid)
+    };
+    try {
+        console.log(JSON.stringify(payload));
+    } catch (error) {
+        console.error("Circular reference found", error);
+    }
+    // @ts-ignore
+    axios.post('https://frp-leg.top:26112/protected/addhomeinfo',
+        payload,
+        {
+            headers: {
+                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyZW1haWwiOiIyMjIiLCJpYXQiOjE3MjkxNTcwNzIsImV4cCI6MTcyOTE2MDY3Mn0.Si7kk-99Br8acdddaTCWPMHWqWABRWlUP3XceWdskik` // 如果使用 Bearer Token
+            },
+            
+        })
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
+const title = ref('');
+const desc = ref('');
+const type = ref('首页');
+const username = "官方发布"
+const avater = "https://github.com/xieleihan/QingluanSearch-AndroidDev/raw/main/peacock_flat.png"
+const likenum = Math.floor(Math.random() * 1000);
+const other = Math.floor(Math.random() * 1000);
+const commentid = Math.floor(Math.random() * 1000);
+// @ts-ignore
+const img = [];
+
+
+watch(() => typeStore.typename, (value) => {
+    // console.log(value);
+    type.value = value;
+});
 
 const fileList = ref([
-    { url: 'https://fastly.jsdelivr.net/npm/@vant/assets/leaf.jpeg' },
+    
     // Uploader 根据文件后缀来判断是否为图片文件
     // 如果图片 URL 中不包含类型信息，可以添加 isImage 标记来声明
 ]);
+
+watch(() => fileList.value, (value) => {
+    const length = value.length;
+    for (let i = 0; i < length; i++){
+        // @ts-ignore
+        // console.log(value[i].content);
+        img.push(value[i].content);
+    }
+});
 </script>
 
 <style scoped lang="less">

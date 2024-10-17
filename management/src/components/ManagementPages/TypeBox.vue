@@ -2,7 +2,7 @@
     <div class="typebox">
         <div v-for="(item,index) in list" 
             :key="index" 
-            @click="setActiveclass(index)" 
+            @click="setActiveclass(index, item.name)" 
             :class="activeIndex === item.id ? 'item active': 'item' ">
             {{ item.name }}
         </div>
@@ -11,9 +11,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useTypeStore } from '../../stores/type'
+const typeStore = useTypeStore();
 
-function setActiveclass(index: number) {
+function setActiveclass(index: number, name: string) {
     activeIndex.value = index;
+    typeStore.setTypename(name);
 }
 
 const activeIndex = ref(0);

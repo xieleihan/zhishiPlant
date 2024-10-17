@@ -11,6 +11,7 @@
             </van-collapse-item>
             <van-collapse-item class="bgColor" title="状态管理" name="3" icon="cluster-o">
                 <div class="smallcard" @click="setIndex(4)" :class="cell.isIndex === 4 ? 'active' : ''">服务器状态</div>
+                <div class="smallcard" @click="setIndex(5)" :class="cell.isIndex === 5 ? 'active' : ''">系统设置</div>
             </van-collapse-item>
         </van-collapse>
         <div class="desc">Copyright© 2024 SouthAki,All right.</div>

@@ -79,8 +79,6 @@ npm run start
 
 ### 邮箱验证码
 
-
-
 > #### 发送验证码
 >
 > 接口地址:`https://localhost:9008/email/send`
@@ -202,5 +200,23 @@ npm run start
 > 返回JSON数据:包含`CPU`,`GPU(Intel和英伟达)`,`内存占用`
 >
 > 延时:`20S`,请前端请求的时候考虑服务器的压力,设置对应的时间
+
+### 百度千帆AI模型
+
+> 接口地址:`http://localhost:9008/baiduai`
+>
+> 方法:`GET`
+>
+> 传递参数:`message`
+
+### 文件处理
+
+> #### 上传文件
+>
+> 接口地址:`http://localhost:9008`
+>
+> 方法:`POST`
+>
+> 传递参数:**单文件用:`file`**,**多文件用:`files`**
 
 # 未完待续

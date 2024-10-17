@@ -24,7 +24,18 @@
                             你好,请问有什么可以帮助您的吗？
                         </div>
                     </div>
-                    <div class="right">
+                    <div v-for="(item, index) in LineStore.sum" :key="index"
+                        :class="item.role === 'right' ? 'right' : 'left'">
+                        <div class="avater">
+                            <img :src="item.role === 'right' ? rightAvatarUrl : leftAvatarUrl" alt="">
+                            <p class="avaterinfo" v-if="item.role === 'left'">你的小助手</p>
+                            <p class="avaterinfo" v-if="item.role === 'right'">Administer</p>
+                        </div>
+                        <div class="container">
+                            {{ item.content }}
+                        </div>
+                    </div>
+                    <!-- <div class="right">
                         <div class="avater">
                             <img src="../assets/images/peacock_flat.png" alt="">
                             <p class="avaterinfo">Administer</p>
@@ -33,10 +44,19 @@
                             你好,请问有什么可以帮助您的吗？
                         </div>
                     </div>
+                    <div class="left">
+                        <div class="avater">
+                            <img src="../assets/images/kefu.webp" alt="">
+                            <p class="avaterinfo">你的小助手</p>
+                        </div>
+                        <div class="container">
+                            你好,请问有什么可以帮助您的吗？
+                        </div>
+                    </div> -->
                 </div>
                 <div class="smsInput">
-                    <input type="text" placeholder="请输入咨询信息">
-                    <div class="smssend">
+                    <input v-model="inputsms" type="text" placeholder="请输入咨询信息">
+                    <div class="smssend" @click="sendAi">
                         <van-icon name="guide-o" />
                     </div>
                 </div>
@@ -47,6 +67,27 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { computed } from 'vue';
+import axios from 'axios';
+
+// 引入pinia
+import { useLineStore } from '../stores/line'
+const LineStore = useLineStore();
+
+const rightAvatarUrl = new URL('../assets/images/peacock_flat.png', import.meta.url).href;
+const leftAvatarUrl = new URL('../assets/images/kefu.webp', import.meta.url).href;
+
+const inputsms = ref('');
+const sendAi = () => {
+    LineStore.addRight(inputsms.value);
+    axios.get(`https://frp-leg.top:26112/baiduai?message=${inputsms.value}`).then((res) => {
+        LineStore.addLeft(res.data.result);
+        console.log(res.data.result)
+    }).catch((err) => {
+        console.log(err)
+    })
+    inputsms.value = '';
+}
 
 import ManagementTopcom from '@/components/ManagementTopcom.vue';
 import ManagementContainer from '@/components/ManagementContainer.vue';
@@ -200,7 +241,7 @@ const isSmsOpen = ref(false);
                             right: 35px;
                             top: 30px;
                             width: calc(100% - 30px);
-                            height: 60px;
+                            height: auto;
                             background-color: @googleBlue;
                             color: white;
                             padding: 10px;
