@@ -52,7 +52,7 @@ app.get('/proxy', async (req, res) => {
     const response = await axios.get(url);
     res.send({
       "code": 200,
-      "data": "+response.data+"
+      "data": response.data
     });
   } catch (error) {
     console.error('Error occurred while fetching data:', error.message);
