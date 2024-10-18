@@ -39,56 +39,95 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import axios from 'axios';
-import { onMounted } from 'vue';
 import BaiduMap from './BaiduMap.vue';
-
-// 获取服务器信息
-onMounted(() => {
-    axios.get('https://frp-leg.top:26112/proxyip').then((res) => {
-        
-        ip.value = res.data.data.data.ip;
-        if (res.data.code === 200) {
-            statusstring.value = '正常';
-        } else {
-            statusstring.value = '异常';
-        }
-        city.value = res.data.data.data.location[2]
-        operator.value = res.data.data.data.location[4]
-    })
-})
-
-const ip = ref('');
-const statusstring = ref('正常');
-const city = ref('香港');
-const operator = ref('联通');
-
-let intervalId = setInterval(() => {
-    axios.get('https://frp-leg.top:26112/super/server-info').then((res) => {
-        // console.log(res.data.data);
-        currentRate1.value = res.data.data.cpuUsage.toFixed(2) * 100;
-        currentRate2.value = res.data.data.gpuUsage ===0 ? 0 : res.data.data.gpuUsage.toFixed(2) * 100;
-        currentRate3.value = parseFloat((res.data.data.freeMem / res.data.data.totalMem).toFixed(2)) * 100;
-    })
-},20000)
 
 // 定义三个进度的 rate 值
 const currentRate1 = ref(0);
 const currentRate2 = ref(0);
 const currentRate3 = ref(0);
 
-// 计算每个 circle 的文本值
-const numberText1 = computed(() => currentRate1.value.toFixed(0) + '%');
-const numberText2 = computed(() => currentRate2.value.toFixed(0) + '%');
-const numberText3 = computed(() => currentRate3.value.toFixed(0) + '%');
+// 定义IP信息
+const ip = ref('');
+const statusstring = ref('正常');
+const city = ref('香港');
+const operator = ref('联通');
 
 // 定义渐变颜色
 const gradientColor = {
     '0%': '#3fecff',
     '100%': '#6149f6',
 };
+
+// 计算每个 circle 的文本值
+const numberText1 = computed(() => currentRate1.value.toFixed(0) + '%');
+const numberText2 = computed(() => currentRate2.value.toFixed(0) + '%');
+const numberText3 = computed(() => currentRate3.value.toFixed(0) + '%');
+
+let socket: WebSocket | null = null;
+
+// 获取服务器信息 (IP等)
+onMounted(() => {
+    axios.get('https://frp-leg.top:26112/proxyip').then((res) => {
+        ip.value = res.data.data.data.ip;
+        if (res.data.code === 200) {
+            statusstring.value = '正常';
+        } else {
+            statusstring.value = '异常';
+        }
+        city.value = res.data.data.data.location[2];
+        operator.value = res.data.data.data.location[4];
+    });
+
+    // 创建 WebSocket 连接
+    socket = new WebSocket('ws://157.122.209.79:61261'); // 修改为你的 WebSocket URL
+
+    socket.onopen = () => {
+        console.log('WebSocket 已连接');
+    };
+
+    socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        console.log('从 WebSocket 接收到数据:', data);
+        // 更新实时数据
+        currentRate1.value = data.cpuUsage ? parseFloat((data.cpuUsage * 100).toFixed(2)) : 0;
+        currentRate2.value = data.gpuUsage ? parseFloat((data.gpuUsage * 100).toFixed(2)) : 0;
+        currentRate3.value = data.freeMem && data.totalMem
+            ? parseFloat(((data.freeMem / data.totalMem) * 100).toFixed(2))
+            : 0;
+    };
+
+    socket.onclose = () => {
+        console.log('WebSocket 连接已关闭');
+    };
+
+    socket.onerror = (error) => {
+        console.error('WebSocket 出现错误:', error);
+    };
+
+    // 定时使用 axios 请求作为备用
+    let intervalId = setInterval(() => {
+        axios.get('https://frp-leg.top:26112/super/server-info').then((res) => {
+            currentRate1.value = res.data.data.cpuUsage.toFixed(2) * 100;
+            currentRate2.value = res.data.data.gpuUsage === 0
+                ? 0
+                : res.data.data.gpuUsage.toFixed(2) * 100;
+            currentRate3.value = parseFloat((res.data.data.freeMem / res.data.data.totalMem).toFixed(2)) * 100;
+        });
+    }, 20000);
+
+    onBeforeUnmount(() => {
+        // 清除定时器
+        clearInterval(intervalId);
+        // 关闭 WebSocket 连接
+        if (socket) {
+            socket.close();
+        }
+    });
+});
 </script>
+
 
 
 <style scoped lang="less">

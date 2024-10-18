@@ -7,19 +7,19 @@
             <p class="info">准备进入星球</p>
             <div class="inputBox">
                 <div class="text">邮箱:</div>
-                <input type="email" placeholder="请输入邮箱">
+                <input type="email" placeholder="请输入邮箱" v-model="inputuseremail">
                 <div class="text">密码:</div>
                 <div class="passwordBox">
-                    <input type="password" placeholder="请输入密码">
+                    <input type="password" placeholder="请输入密码" v-model="inputuserpassword">
                     <img src="../../assets/icon/隐藏.png" alt="">
                 </div>
                 <div class="formatPassword"><span @click="goToFormat">忘记密码</span></div>
             </div>
             <div class="potocl">
-                <input type="checkbox" />
+                <input type="checkbox" v-model="inputboolean" />
                 <p>我已阅读并同意<span @click="showPopup">《用户协议》</span>和<span @click="showPopup1">《隐私政策》</span></p>
             </div>
-            <button>登录</button>
+            <button @click="sendlogin">登录</button>
         </div>
     </div>
     <van-popup v-model:show="show" closeable round position="center" :style="{ height: '70%',width:'70%' }">
@@ -297,6 +297,61 @@ import router from '@/router';
 import StartReturnbtn from '@/components/StartReturnbtn.vue';
 import { ref } from 'vue';
 import { onMounted } from 'vue';
+import axios from 'axios';
+import { showToast } from 'vant';
+import { showConfirmDialog } from 'vant';
+
+const inputuseremail = ref('');
+const inputuserpassword = ref('');
+const inputboolean = ref(false);
+
+function sendlogin() {
+    if(inputuseremail.value == '' || inputuserpassword.value == ''){
+        showToast('你有输入框未填写');
+        return;
+    } else {
+        if(inputboolean.value == false){
+            showConfirmDialog({
+                title: '请先阅读以下信息',
+                message:
+                    '知识星球《用户协议》和《隐私政策》',
+            })
+                .then(() => {
+                    axios.post('https://frp-leg.top:26112/public/login', {
+                        useremail: inputuseremail.value,
+                        userpassword: inputuserpassword.value
+                    }).then((res) => {
+                        if (res.data.code == 200) {
+                            showToast('登录成功');
+                            homeStore.close();
+                            sessionStorage.setItem('token', res.data.data.token);
+                            router.push({ name: 'home' });
+                        } else {
+                            showToast('登录失败');
+                        }
+                    });
+                })
+                .catch(() => {
+                    // on cancel
+                });
+            return;
+        } else {
+            axios.post('https://frp-leg.top:26112/public/login', {
+                useremail: inputuseremail.value,
+                userpassword: inputuserpassword.value
+            }).then((res) => {
+                if (res.data.code == 200){
+                    showToast('登录成功');
+                    homeStore.close();
+                    sessionStorage.setItem('token', res.data.data.token);
+                    router.push({ name: 'home' });
+                } else {
+                    showToast('登录失败');
+                }
+            });
+        }
+    }
+}
 
 onMounted(() => {
     homeStore.loginClose();

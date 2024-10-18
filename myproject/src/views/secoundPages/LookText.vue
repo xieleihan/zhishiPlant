@@ -40,6 +40,6 @@ function handleShowShare(status: boolean) {
         overflow-y: scroll;
         // padding-top: 50px;
         position: relative;
-        background-color: skyblue;
+        // background-color: skyblue;
     }
 </style>

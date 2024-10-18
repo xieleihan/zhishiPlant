@@ -7,24 +7,24 @@
             <p class="info">准备加入群星之中</p>
             <div class="inputBox">
                 <div class="text">用户名:</div>
-                <input type="text" placeholder="请输入用户名" />
+                <input v-model="inputusername" type="text" placeholder="请输入用户名" />
                 <div class="text">邮箱:</div>
-                <input type="email" placeholder="请输入邮箱">
+                <input v-model="inputuseremail" type="email" placeholder="请输入邮箱">
                 <div class="text">密码:</div>
                 <div class="passwordBox">
-                    <input type="password" placeholder="请输入密码">
+                    <input v-model="inputuserpassword" type="password" placeholder="请输入密码">
                     <img src="../../assets/icon/隐藏.png" alt="">
                 </div>
                 <div class="passwordBox">
-                    <input class="query" type="password" placeholder="请再次确认密码">
+                    <input v-model="inputuserpassword1" class="query" type="password" placeholder="请再次确认密码">
                     <img src="../../assets/icon/隐藏.png" alt="">
                 </div>
             </div>
             <div class="potocl">
-                <input type="checkbox" />
+                <input v-model="inputboolean" type="checkbox" />
                 <p>我已阅读并同意<span @click="showPopup">《用户协议》</span>和<span @click="showPopup1">《隐私政策》</span></p>
             </div>
-            <button>提交</button>
+            <button @click="sendregister">提交</button>
         </div>
     </div>
     <van-popup v-model:show="show" closeable round position="center" :style="{ height: '70%', width: '70%' }">
@@ -296,8 +296,93 @@
 
 <script setup lang="ts">
 import StartReturnbtn from '@/components/StartReturnbtn.vue';
+import { showToast } from 'vant';
+import { showConfirmDialog } from 'vant';
+import axios from 'axios';
+import router from '../../router/index'
+import { useHomeStore } from '../../stores/home'
+
+const homeStore = useHomeStore();
+
 
 import { ref } from 'vue';
+
+const inputusername = ref('');
+const inputuseremail = ref('');
+const inputuserpassword = ref('');
+const inputuserpassword1 = ref('');
+const inputboolean = ref(false);
+
+function sendregister() {
+    if (inputusername.value === '' || inputuseremail.value === '' || inputuserpassword.value === '' || inputuserpassword1.value === '') {
+        showToast('你有输入框未填');
+        return;
+    } else {
+        if (inputuserpassword.value !== inputuserpassword1.value) {
+            showToast('两次密码不一致');
+            return;
+        } else {
+            if (inputboolean.value === false) {
+                showConfirmDialog({
+                    title: '请同意以下协议',
+                    message: '知识星球的《用户协议》和《隐私政策》',
+                })
+                    .then(() => {
+                        inputboolean.value = true;
+                        setTimeout(() => {
+                            // 使用 .value 获取 ref 的实际值
+                            axios.post('https://frp-leg.top:26112/public/register', {
+                                username: inputusername.value,
+                                useremail: inputuseremail.value,
+                                userpassword: inputuserpassword.value
+                            }).then((res) => {
+                                console.log(res)
+                                if (res.data.code === 200) {
+                                    showToast('注册成功');
+                                    setTimeout(() => {
+                                        homeStore.startOpen()
+                                        router.push('/login');
+                                    }, 2000);
+                                } else {
+                                    showToast('注册失败');
+                                }
+                            }).catch((err) => {
+                                showToast('注册失败');
+                                console.error(err);
+                            });
+                        }, 2000);
+                    })
+                    .catch(() => {
+                        // 取消时执行的操作
+                    });
+            } else {
+                setTimeout(() => {
+                    // 使用 .value 获取 ref 的实际值
+                    axios.post('https://frp-leg.top:26112/public/register', {
+                        username: inputusername.value,
+                        useremail: inputuseremail.value,
+                        userpassword: inputuserpassword.value
+                    }).then((res) => {
+                        console.log(res)
+                        if (res.data.code === 200) {
+                            showToast('注册成功');
+                            setTimeout(() => {
+                                homeStore.startOpen()
+                                router.push('/login');
+                            }, 2000);
+                        } else {
+                            showToast('注册失败');
+                        }
+                    }).catch((err) => {
+                        showToast('注册失败');
+                        console.error(err);
+                    });
+                }, 2000);
+            }
+        }
+    }
+}
+
 
 const show = ref(false);
 const show1 = ref(false);

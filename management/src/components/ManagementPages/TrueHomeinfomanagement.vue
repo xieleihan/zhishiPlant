@@ -11,7 +11,7 @@
         </div>
         <div class="bottom">
             <!-- 下面的是模版 -->
-            <div class="item">
+            <!-- <div class="item">
                 <div class="imgBox">
                     <div class="container">
                         <img src="../../assets/images/1.jpg" alt="">
@@ -32,14 +32,47 @@
                     <button class="btn">删除</button>
                     <button class="btn">复制</button>
                 </div>
+            </div> -->
+            <div class="item" v-for="(item,index) in arr" :key="index">
+                <div class="imgBox">
+                    <div class="container">
+                        <img :src="item.img" alt="">
+                    </div>
+                </div>
+                <div class="noimg titlebox">{{ item.title }}</div>
+                <div class="noimg containerBox">{{ item.info }}</div>
+                <div class="noimg typeinfo">{{ item.type }}</div>
+                <div class="noimg usernameInfo">{{ item.username }}</div>
+                <div class="noimg likenuminfo">{{ item.likenum }}</div>
+                <div class="noimg btnbox">
+                    <button class="btn">修改</button>
+                    <button class="btn">删除</button>
+                    <button class="btn">复制</button>
+                </div>
             </div>
-            
+
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+import axios from 'axios';
+import { onMounted } from 'vue';
 
+const arr = ref<any[]>([]);
+
+onMounted(() => {
+    axios.get('https://frp-leg.top:26112/public/homeinfo')
+        .then((res) => {
+            console.log(res.data.data);
+            arr.value = res.data.data;  // 将值赋给 arr.value 而不是 arr
+            console.log(arr.value);  // 访问 arr.value 来查看值
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+});
 </script>
 
 <style scoped lang="less">

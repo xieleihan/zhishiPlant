@@ -42,6 +42,7 @@ onMounted(() => {
 
 async function fetchStoryData(url: string) {
     try {
+        console.log('请求数据:', url);
         const res = await axios.get(`https://frp-leg.top:26112/proxy?url=${encodeURIComponent(url)}`);
         // 解析服务器返回的数据
         if (res.data && res.data.code === 200 && typeof res.data.data === 'string') {

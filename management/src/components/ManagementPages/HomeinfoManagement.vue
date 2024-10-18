@@ -21,6 +21,10 @@ import axios from 'axios';
 import { useTypeStore } from '@/stores/type';
 const typeStore = useTypeStore();
 
+import { showSuccessToast, showFailToast } from 'vant';
+
+
+
 function sendHomedb() {
     // @ts-ignore
     console.log(img, title, desc, type, username, avater, likenum, other, commentid);
@@ -46,15 +50,18 @@ function sendHomedb() {
         payload,
         {
             headers: {
-                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyZW1haWwiOiIyMjIiLCJpYXQiOjE3MjkxNTcwNzIsImV4cCI6MTcyOTE2MDY3Mn0.Si7kk-99Br8acdddaTCWPMHWqWABRWlUP3XceWdskik` // 如果使用 Bearer Token
+                Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyZW1haWwiOiIyMjIiLCJpYXQiOjE3MjkyMTU5NzcsImV4cCI6MTcyOTIxOTU3N30._zlsLVVnV3S61NfCPWFl-6gdxzfKvrEuG9aI1QKyZdI` // 如果使用 Bearer Token
             },
             
         })
         .then(response => {
             console.log(response.data);
+            showSuccessToast('插入成功了');
         })
         .catch(error => {
             console.error(error);
+            showFailToast('失败了');
+
         });
 }
 

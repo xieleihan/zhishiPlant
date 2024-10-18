@@ -1,12 +1,20 @@
 <template>
     <div class="sendInfo">
         <input type="text" placeholder="请输入信息标题" class="infoTitle">
+        <input type="text" placeholder="收件人" class="infoTitle">
         <div class="functionArea">
             <van-icon name="records-o" />
             <van-icon name="brush-o" />
             <van-icon name="edit" />
             <van-icon name="revoke" />
             <van-icon name="link-o" />
+            <div class="dropdown">
+                <van-popover v-model:show="showPopover" :actions="actions" @select="onSelect">
+                    <template #reference>
+                        <van-button type="primary">{{ text }}</van-button>
+                    </template>
+                </van-popover>
+            </div>
         </div>
         <textarea name="" id="" placeholder="请输入信息内容"></textarea>
         <button class="sendbtn">发送</button>
@@ -15,6 +23,22 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+
+const showPopover = ref(false);
+
+const onSelect = (action: { text: string }) => {
+    text.value = action.text;
+    showPopover.value = false;
+};
+
+const text = ref('点击选类别');
+
+// 通过 actions 属性来定义菜单选项
+const actions = [
+    { text: '广播' },
+    { text: '广告' },
+    { text: '推流' },
+];
 </script>
 
 
@@ -43,6 +67,13 @@ import { ref } from 'vue';
             i{
                 margin-right: 10px;
                 font-size: 20px;
+                cursor: pointer;
+            }
+            .dropdown{
+                width: 120px;
+                background-color: white;
+                position: relative;
+                height: 50px;
             }
         }
         textarea{

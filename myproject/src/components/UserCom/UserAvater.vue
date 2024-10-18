@@ -7,7 +7,7 @@
         <div class="notification">
             <img src="../../assets/icon/notifications.png" alt="">
         </div>
-        <div class="container">
+        <div class="container" @click="rigthScroll">
             <div class="left">
                 <img src="../../assets/images/avater.jpg" alt="">
             </div>
@@ -40,7 +40,11 @@
 </template>
 
 <script setup lang="ts">
-
+// import { ref } from 'vue';
+function rigthScroll(){
+    console.log('点击了右侧按钮');
+    
+}
 </script>
 
 <style scoped lang="less">
