@@ -36,7 +36,7 @@ select * from userinfo;
 drop table if exists `homeinfo`;
 create table homeinfo(
 	id int auto_increment primary key,
-    img text not null, -- 图片
+    img longtext not null, -- 图片
     title varchar(100) not null, -- 文章标题
     info text not null, -- 文章信息
     type varchar(20) not null, -- 类型
@@ -102,6 +102,8 @@ select * from shopping;
 drop table if exists `db_email_code`;
 create table db_email_code(
 	id int auto_increment primary key,
-    client_email varchar(50) not null
+    client_email varchar(50) not null,
+    email_code varchar(50) ,
+    code_id text
 );
 select * from db_email_code;
