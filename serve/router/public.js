@@ -3,7 +3,7 @@ const db = require('../db/index.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const secretKey = 'your_secret_key';  // 设置一个私密的密钥，用于签发token，应该存放在环境变量中
-const {generateToken} = require('../authorization/index');
+// const {generateToken} = require('../authorization/index');
 
 // 获取所有 `homeinfo` 表的数据
 router.get('/homeinfo', async (req, res) => {

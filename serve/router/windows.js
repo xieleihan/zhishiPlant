@@ -2,9 +2,10 @@ const express = require('express');
 const nodeCMD = require('node-cmd');
 const os = require('os-utils');
 const { exec } = require('child_process');
+const WebSocket = require('ws'); // 引入 ws 库
 
+const app = express();
 const router = express.Router();
-
 const serverInfo = {
     cpuUsage: 0,
     gpuUsage: 0,
@@ -12,6 +13,9 @@ const serverInfo = {
     freeMem: 0,
     totalMem: 0
 };
+
+// WebSocket 服务器
+const wss = new WebSocket.Server({ noServer: true });
 
 /**
  * 获取系统内存情况
@@ -102,19 +106,49 @@ async function getIntelGPUUsage() {
     }
 }
 
-// 每 20 秒更新一次系统信息
-setInterval(() => {
-    getCPUUsage();
-    getIntelGPUUsage()
-    getMem();
-}, 20000);
-
 // 定义 GET 请求接口来获取系统信息
 router.get('/server-info', (req, res) => {
     res.json({
         code: 200,
         message: 'Success',
         data: serverInfo
+    });
+});
+
+// 每 20 秒更新一次系统信息，并通过 WebSocket 推送
+setInterval(() => {
+    getCPUUsage();
+    getIntelGPUUsage();
+    getMem();
+    
+    // 通过 WebSocket 广播最新的系统信息给所有客户端
+    wss.clients.forEach(function each(client) {
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify(serverInfo));
+        }
+    });
+}, 20000);
+
+// WebSocket 连接事件
+wss.on('connection', (ws) => {
+    console.log('New client connected');
+    
+    // 发送当前的系统信息
+    ws.send(JSON.stringify(serverInfo));
+    
+    ws.on('close', () => {
+        console.log('Client disconnected');
+    });
+});
+
+const server = app.listen(3000, () => {
+    console.log('Server listening on port 3000');
+});
+
+// 将 WebSocket 服务器集成到 HTTP 服务器中
+server.on('upgrade', (request, socket, head) => {
+    wss.handleUpgrade(request, socket, head, (ws) => {
+        wss.emit('connection', ws, request);
     });
 });
 
