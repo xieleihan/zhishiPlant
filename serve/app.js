@@ -7,6 +7,8 @@ const path = require('path')
 const bodyParser = require('body-parser')
 const axios = require('axios')
 const svgCaptcha = require('svg-captcha')
+const multer = require('multer');
+const fs = require('fs');
 
 // 创建程序
 const app = express()
@@ -62,20 +64,20 @@ app.get('/proxy', async (req, res) => {
 
 // proxy
 app.get('/proxyip', async (req, res) => {
-    try {
+  try {
 	// mainland: https://myip.ipip.net/json
 	// hongkong: https://ipapi.co/json/
-        const response = await axios.get('https://myip.ipip.net/json');
-        res.send({
-            "code": 200,
-            "data": response.data
-        });
-    } catch (error) {
-        res.send({
-            "code": 500,
-            "message": "ERROR"
-        });
-    }
+    const response = await axios.get('https://myip.ipip.net/json');
+    res.send({
+      "code": 200,
+      "data": response.data
+    });
+  } catch (error) {
+    res.send({
+      "code": 500,
+      "message": "ERROR"
+    });
+  }
 });
 
 let vercode;
@@ -124,6 +126,39 @@ app.get('/getVerInfo',(req,res) => {
 	}
 })
 
+
+// 创建 public 目录
+const uploadDir = path.join(__dirname, 'public');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+// 配置 multer 中间件
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);  // 保存到 public 文件夹下
+  },
+  filename: (req, file, cb) => {
+    // 设置文件名，保留原始文件名
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage });
+
+// 接收图片的 POST 接口
+app.post('/upload-image', upload.single('image'), (req, res) => {
+  console.log("调用了一次")
+  if (!req.file) {
+    return res.status(400).json({ message: 'No file uploaded' });
+  }
+
+  // 返回图片的存储路径
+  res.status(200).json({
+    message: 'Image uploaded successfully',
+    filePath: `/public/${req.file.filename}`
+  });
+});
+
 const userRouter = require('./router/user');
 const registerRouter = require('./router/register');
 const authenticateToken = require('./authorization/index');
@@ -135,7 +170,11 @@ const emailRouter = require('./public/httpapi.js')
 // const AiRouter = require('./router/AiRouter')
 const BaiduaiRouter = require('./router/BaiduaiRouter')
 const UploadRouter = require('./router/UploadDocument')
+const deepseek = require('./router/deepseek')
+const qrcode = require('./router/qrcode')
 app.use(UploadRouter)
+app.use(deepseek)
+app.use(qrcode)
 app.use(express.json());
 // app.use(AiRouter)
 app.use(BaiduaiRouter)
@@ -149,7 +188,7 @@ app.use('/protected', userRouter)
 app.use('/protected',homeinfoRouter)
 
 // 设置端口
-const port = 9008
+const port = 10089
 const server = app.listen(port, () => {
     console.log('Server is running');
     console.log('http://loaclhost:' + port);

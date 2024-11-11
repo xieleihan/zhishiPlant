@@ -27,6 +27,28 @@ router.get('/send', async (req,res)=> {
     )
 })
 
+router.get('/sendemail', async (req, res) => {
+	// 接收qq邮箱
+	let { email, uuid, date, from, to, type, randomNumber, base64 } = req.query;
+	console.log(email,base64)
+	// 调用api把验证码发送到邮箱
+	await emailApi.sendeqqmail(email, uuid, date, from, to, type, randomNumber, base64)
+		.then(
+			(data) => {
+				// 发送邮箱验证码成功
+				res.send(data)
+			},
+			error => {
+				// 发送邮箱验证码失败
+				res.send({
+					code: -1,
+					msg: '发送失败',
+					error
+				})
+			}
+		)
+})
+
 // 验证QQ邮箱和验证码的接口
 // URL:  /api/email/verify
 router.get('/verify', async (req,res)=> {
